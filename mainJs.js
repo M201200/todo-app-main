@@ -188,6 +188,7 @@ function dragStart(event) {
 /////////////////////////////////////////////////////////////
 
 function dragEnter(event) {
+  event.preventDefault();
   let taskId = event.dataTransfer.getData("task");
   if (event.target.classList.contains("tasks-text") && event.target.parentElement.id > taskId) {
     event.target.parentElement.classList.add("drop-after");
