@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="mainStyles.css">
+  
+  <title>Frontend Mentor | Todo app</title>
+
+</head>
+<body>
+
+  <div id="main-container">
+    <header>
+      <span id="title">TODO</span>
+      <button id="theme-button"></button>
+    </header>
+    
+    <div id="input-container">
+    <span id="before-input"></span>
+    <input type="text" name="input-area" id="input-area" placeholder="Write a new task and press Enter...">
+  </div>
+    
+    <div id="tasks-container">
+    </div>
+    <div id="items-counter">
+      <span><span id="count-number">0</span> items left</span>
+    </div>
+    <div id="tasks-sort">
+      <button id="sort-all">All</button>
+      <button id="sort-active">Active</button>
+      <button id="sort-completed">Completed</button>
+    </div>
+    <div id="tasks-clear">
+      <button id="clear">Clear Completed</button>
+    </div>
+    <footer>
+      <span>Drag and drop to reorder list</span>
+    </footer>
+  </div>
+
+  <script src="mainJs.js"></script>
+  
+</body>
+</html>
