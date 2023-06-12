@@ -241,6 +241,7 @@ function drop(event) {
 function activeTaskFilter() {
   let allChecked = document.querySelectorAll('.checked');
   let sortedOutTasks = document.querySelectorAll(".sorted-out");
+  let uncheckedTasks = document.querySelectorAll('.check-mark:not(.checked)');
 
   if (!sortedOutTasks.length) {
     document.querySelector('#sort-all').classList.add('active');
@@ -254,11 +255,22 @@ function activeTaskFilter() {
     document.querySelector('#sort-active').classList.remove('active');
   };
 
-  if (sortedOutTasks.length === document.querySelectorAll('.check-mark:not(.checked)').length) {
+  if (sortedOutTasks.length === uncheckedTasks.length) {
     document.querySelector('#sort-completed').classList.add('active');
   } else {
     document.querySelector('#sort-completed').classList.remove('active');
   };
+};
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
+function setAllTasksVisible () {
+  let allTasks = document.querySelectorAll('.tasks');
+
+  allTasks.forEach(elem => {
+    elem.classList.remove("sorted-out");
+  })
 };
 
 ////////////////////////////
@@ -271,24 +283,20 @@ function activeTaskFilter() {
 // Sort buttons //
 //////////////////
 
-document.querySelector('#sort-all').addEventListener('click', () => {
-  let allTasks = document.querySelectorAll('.tasks');
 
-  allTasks.forEach(elem => {
-    elem.classList.remove("sorted-out");
-  })
+
+document.querySelector('#sort-all').addEventListener('click', () => {
+  setAllTasksVisible();
   activeTaskFilter();
 });
 
 //////////////////////////////////////////////////////////////
 
 document.querySelector('#sort-active').addEventListener("click", () => {
-  let allTasks = document.querySelectorAll('.tasks');
   let allChecked = document.querySelectorAll('.checked');
 
-  allTasks.forEach(elem => {
-    elem.classList.remove("sorted-out");
-  })
+  setAllTasksVisible();
+
   allChecked.forEach(elem => {
     elem.parentElement.classList.add('sorted-out');
   })
@@ -298,11 +306,8 @@ document.querySelector('#sort-active').addEventListener("click", () => {
 //////////////////////////////////////////////////////////////
 
 document.querySelector("#sort-completed").addEventListener("click", () => {
-  let allTasks = document.querySelectorAll('.tasks');
 
-  allTasks.forEach(elem => {
-    elem.classList.remove("sorted-out");
-  })
+  setAllTasksVisible();
   document.querySelectorAll('.check-mark:not(.checked)').forEach(elem => {
     elem.parentElement.classList.add('sorted-out');
   })
