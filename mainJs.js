@@ -8,24 +8,24 @@
 // Globals for multi purpose//
 //////////////////////////////
 
-let savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-savedTasks.forEach(addTask);
+let savedTasks = JSON.parse(localStorage.getItem("tasks")) || []
+savedTasks.forEach(addTask)
 
-setTasksId();
+setTasksId()
 
-itemsCounter();
+itemsCounter()
 
-let savedChecked = JSON.parse(localStorage.getItem("checked")) || [];
-savedChecked.forEach(checkedItems); // This thing uses tasks.id, so setTasksId() should be first
+let savedChecked = JSON.parse(localStorage.getItem("checked")) || []
+savedChecked.forEach(checkedItems) // This thing uses tasks.id, so setTasksId() should be first
 
-activeTaskFilter(); // visualize filter buttons on startup
+activeTaskFilter() // visualize filter buttons on startup
 
 /////////////////////////////////
 // Sets color scheme on startup//
 /////////////////////////////////
 
-const colorScheme = localStorage.getItem("color-scheme") || getPreferredColorScheme();
-document.documentElement.setAttribute("data-color-scheme", colorScheme);
+const colorScheme = localStorage.getItem("color-scheme") || getPreferredColorScheme()
+document.documentElement.setAttribute("data-color-scheme", colorScheme)
 
 //////////////////////////
 //////////////////////////
@@ -38,47 +38,47 @@ document.documentElement.setAttribute("data-color-scheme", colorScheme);
 ////////////////////////////////////////////////
 
 function getPreferredColorScheme () {
-  const darkQuery = "(prefers-color-scheme: dark)";
-  const darkMQL = window.matchMedia ? window.matchMedia(darkQuery) : {};
+  const darkQuery = "(prefers-color-scheme: dark)"
+  const darkMQL = window.matchMedia ? window.matchMedia(darkQuery) : {}
   if (darkMQL.media === darkQuery && darkMQL.matches) {
-    return "dark";
+    return "dark"
   }
-  return "default";
-};
+  return "default"
+}
 
 ///////////////////////////////
 // Template for task element //
 ///////////////////////////////
 
 function addTask(text) {
-  const tasksContainer = document.getElementById("tasks-container");
+  const tasksContainer = document.getElementById("tasks-container")
 
-  const newTask = document.createElement('div');
-  const newCheckMark = document.createElement("button");
-  const newTasksText = document.createElement("span");
-  const newDeleteButton = document.createElement("button");
+  const newTask = document.createElement('div')
+  const newCheckMark = document.createElement("button")
+  const newTasksText = document.createElement("span")
+  const newDeleteButton = document.createElement("button")
 
-  newTasksText.innerText = text;
+  newTasksText.innerText = text
 
-  newTask.classList.add("tasks");
-  newTask.setAttribute("draggable", "true");
+  newTask.classList.add("tasks")
+  newTask.setAttribute("draggable", "true")
 
-  newCheckMark.classList.add("check-mark");
-  newTasksText.classList.add("tasks-text");
-  newDeleteButton.classList.add("delete");
+  newCheckMark.classList.add("check-mark")
+  newTasksText.classList.add("tasks-text")
+  newDeleteButton.classList.add("delete")
   
-  tasksContainer.append(newTask);
-  newTask.append(newCheckMark, newTasksText, newDeleteButton);
+  tasksContainer.append(newTask)
+  newTask.append(newCheckMark, newTasksText, newDeleteButton)
 
-  newDeleteButton.addEventListener("click", (deleteOneElement));
-  newCheckMark.addEventListener("click", (checkItem));
+  newDeleteButton.addEventListener("click", (deleteOneElement))
+  newCheckMark.addEventListener("click", (checkItem))
    
-  newTask.addEventListener("dragstart", (dragStart));
-  newTasksText.addEventListener("dragenter", (dragEnter));
-  newTasksText.addEventListener("dragover", (dragOver));
-  newTasksText.addEventListener("dragleave", (dragLeave));
-  newTasksText.addEventListener("drop", (drop));
-};
+  newTask.addEventListener("dragstart", (dragStart))
+  newTasksText.addEventListener("dragenter", (dragEnter))
+  newTasksText.addEventListener("dragover", (dragOver))
+  newTasksText.addEventListener("dragleave", (dragLeave))
+  newTasksText.addEventListener("drop", (drop))
+}
 
 /////////////////////////////////////////////////////////////
 // On page load checks tasks by tasks.id from local storage //
@@ -87,149 +87,149 @@ function addTask(text) {
 function checkedItems (checkedId) {
   document.querySelectorAll(".check-mark").forEach(elem => {
     if (+elem.parentElement.getAttribute("id") == checkedId) {
-      elem.classList.add("checked");
-      elem.nextSibling.classList.add("checked-text");
+      elem.classList.add("checked")
+      elem.nextSibling.classList.add("checked-text")
     }
   })
-};
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 function checkItem (event) {
-  event.target.classList.toggle("checked");
-    event.target.nextElementSibling.classList.toggle("checked-text");
-    let parentId = +event.target.parentNode.getAttribute("id");
+  event.target.classList.toggle("checked")
+    event.target.nextElementSibling.classList.toggle("checked-text")
+    let parentId = +event.target.parentNode.getAttribute("id")
 
     if (event.target.classList.contains("checked")) {
-    savedChecked.push(parentId);
-    localStorage.setItem('checked', JSON.stringify(savedChecked));
+    savedChecked.push(parentId)
+    localStorage.setItem('checked', JSON.stringify(savedChecked))
     } 
     else {
-    savedChecked = savedChecked.filter((elem) => elem !== parentId);
-    localStorage.setItem('checked', JSON.stringify(savedChecked));
+    savedChecked = savedChecked.filter((elem) => elem !== parentId)
+    localStorage.setItem('checked', JSON.stringify(savedChecked))
     }
-    activeTaskFilter();
-};
+    activeTaskFilter()
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 function deleteOneElement (event) {
-  let parentId = +event.target.parentNode.getAttribute("id");
-    let parent = event.target.parentNode;
+  let parentId = +event.target.parentNode.getAttribute("id")
+    let parent = event.target.parentNode
 
-    savedTasks = savedTasks.filter((elem, index) => index != parentId);
-    localStorage.setItem("tasks", JSON.stringify(savedTasks));
-    parent.parentNode.removeChild(parent);
+    savedTasks = savedTasks.filter((elem, index) => index != parentId)
+    localStorage.setItem("tasks", JSON.stringify(savedTasks))
+    parent.parentNode.removeChild(parent)
 
-    itemsCounter();
-    setTasksId();
-    refreshCheckedLocalStorage();
+    itemsCounter()
+    setTasksId()
+    refreshCheckedLocalStorage()
     activeTaskFilter()
-};
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 function setTasksId () {
   document.querySelectorAll(".tasks").forEach((elem, index) => {
-    elem.setAttribute("id", index);
-  });
-};
+    elem.setAttribute("id", index)
+  })
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 function itemsCounter () {
-  document.querySelector('#count-number').innerText = document.querySelectorAll(".tasks").length;
-};
+  document.querySelector('#count-number').innerText = document.querySelectorAll(".tasks").length
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 function refreshCheckedLocalStorage () {
-    let allChecked = document.querySelectorAll('.checked');
-    savedChecked = [];
+    let allChecked = document.querySelectorAll('.checked')
+    savedChecked = []
 
     if (allChecked.length) {
       allChecked.forEach((elem) => {
-      savedChecked.push(+elem.parentElement.id);
+      savedChecked.push(+elem.parentElement.id)
       })
-    };
+    }
 
     localStorage.setItem("checked", JSON.stringify(savedChecked))
-};
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 function refreshTasksLocalStorage () {
-  let allTasks = document.querySelectorAll('.tasks-text');
-  savedTasks = [];
+  let allTasks = document.querySelectorAll('.tasks-text')
+  savedTasks = []
 
   if (allTasks.length) {
     allTasks.forEach((elem) => {
-   savedTasks.push(elem.innerText);
+   savedTasks.push(elem.innerText)
    }) 
    }
 
-   localStorage.setItem("tasks", JSON.stringify(savedTasks));
-};
+   localStorage.setItem("tasks", JSON.stringify(savedTasks))
+}
 
 ///////////////////////////
 // Drag-and-drop handlers//
 ///////////////////////////
 
 function dragStart(event) {
-  event.dataTransfer.setData("task", event.target.getAttribute("id"));
-};
+  event.dataTransfer.setData("task", event.target.getAttribute("id"))
+}
 
 /////////////////////////////////////////////////////////////
 
 function dragEnter(event) {
-  event.preventDefault();
-  let taskId = event.dataTransfer.getData("task");
+  event.preventDefault()
+  let taskId = event.dataTransfer.getData("task")
   if (event.target.classList.contains("tasks-text") && event.target.parentElement.id > taskId) {
-    event.target.parentElement.classList.add("drop-after");
+    event.target.parentElement.classList.add("drop-after")
   } else {
-    event.target.parentElement.classList.add("drop-before");
+    event.target.parentElement.classList.add("drop-before")
   }
-};
+}
 
 /////////////////////////////////////////////////////////////
 
 function dragOver(event) {
-  event.preventDefault();
-};
+  event.preventDefault()
+}
 
 /////////////////////////////////////////////////////////////
 
 function dragLeave(event) {
   if (event.target.classList.contains('tasks-text')) {
-    event.target.parentElement.classList.remove("drop-before", "drop-after");
+    event.target.parentElement.classList.remove("drop-before", "drop-after")
   }
-};
+}
 
 /////////////////////////////////////////////////////////////
 
 function drop(event) {
-  event.preventDefault();
+  event.preventDefault()
   if (event.target.classList.contains('tasks-text')) {
-    event.target.parentElement.classList.remove("drop-before", "drop-after");
-    let taskId = event.dataTransfer.getData("task");
-    let element = document.getElementById(taskId);
-    let taskContainer = event.target.parentElement;
+    event.target.parentElement.classList.remove("drop-before", "drop-after")
+    let taskId = event.dataTransfer.getData("task")
+    let element = document.getElementById(taskId)
+    let taskContainer = event.target.parentElement
     if (taskContainer.id > taskId) {
-    taskContainer.after(element);
+    taskContainer.after(element)
     } else {
-      document.getElementById('tasks-container').insertBefore(element, taskContainer);
+      document.getElementById('tasks-container').insertBefore(element, taskContainer)
     }
-    setTasksId();
-    refreshTasksLocalStorage();
-    refreshCheckedLocalStorage();
+    setTasksId()
+    refreshTasksLocalStorage()
+    refreshCheckedLocalStorage()
   }
-};
+}
 
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -239,39 +239,39 @@ function drop(event) {
 // listener separately and not globally.
 
 function activeTaskFilter() {
-  let allChecked = document.querySelectorAll('.checked');
-  let sortedOutTasks = document.querySelectorAll(".sorted-out");
-  let uncheckedTasks = document.querySelectorAll('.check-mark:not(.checked)');
+  let allChecked = document.querySelectorAll('.checked')
+  let sortedOutTasks = document.querySelectorAll(".sorted-out")
+  let uncheckedTasks = document.querySelectorAll('.check-mark:not(.checked)')
 
   if (!sortedOutTasks.length) {
-    document.querySelector('#sort-all').classList.add('active');
+    document.querySelector('#sort-all').classList.add('active')
   } else {
-    document.querySelector('#sort-all').classList.remove('active');
-  };
+    document.querySelector('#sort-all').classList.remove('active')
+  }
 
   if (sortedOutTasks.length === allChecked.length) {
-    document.querySelector('#sort-active').classList.add('active');
+    document.querySelector('#sort-active').classList.add('active')
   } else {
-    document.querySelector('#sort-active').classList.remove('active');
-  };
+    document.querySelector('#sort-active').classList.remove('active')
+  }
 
   if (sortedOutTasks.length === uncheckedTasks.length) {
-    document.querySelector('#sort-completed').classList.add('active');
+    document.querySelector('#sort-completed').classList.add('active')
   } else {
-    document.querySelector('#sort-completed').classList.remove('active');
-  };
-};
+    document.querySelector('#sort-completed').classList.remove('active')
+  }
+}
 
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
 function setAllTasksVisible () {
-  let allTasks = document.querySelectorAll('.tasks');
+  let allTasks = document.querySelectorAll('.tasks')
 
   allTasks.forEach(elem => {
-    elem.classList.remove("sorted-out");
+    elem.classList.remove("sorted-out")
   })
-};
+}
 
 ////////////////////////////
 ////////////////////////////
@@ -286,73 +286,73 @@ function setAllTasksVisible () {
 
 
 document.querySelector('#sort-all').addEventListener('click', () => {
-  setAllTasksVisible();
-  activeTaskFilter();
-});
+  setAllTasksVisible()
+  activeTaskFilter()
+})
 
 //////////////////////////////////////////////////////////////
 
 document.querySelector('#sort-active').addEventListener("click", () => {
-  let allChecked = document.querySelectorAll('.checked');
+  let allChecked = document.querySelectorAll('.checked')
 
-  setAllTasksVisible();
+  setAllTasksVisible()
 
   allChecked.forEach(elem => {
-    elem.parentElement.classList.add('sorted-out');
+    elem.parentElement.classList.add('sorted-out')
   })
-  activeTaskFilter();
-});
+  activeTaskFilter()
+})
 
 //////////////////////////////////////////////////////////////
 
 document.querySelector("#sort-completed").addEventListener("click", () => {
 
-  setAllTasksVisible();
+  setAllTasksVisible()
   document.querySelectorAll('.check-mark:not(.checked)').forEach(elem => {
-    elem.parentElement.classList.add('sorted-out');
+    elem.parentElement.classList.add('sorted-out')
   })
-  activeTaskFilter();
-});
+  activeTaskFilter()
+})
 
 //////////////////////////
 // Clear Completed Tasks//
 //////////////////////////
 
 clear.addEventListener("click", () => {
-  let allChecked = document.querySelectorAll('.checked');
+  let allChecked = document.querySelectorAll('.checked')
   allChecked.forEach(elem => {
-    elem.parentElement.remove();
+    elem.parentElement.remove()
   })
-  itemsCounter();
-  setTasksId();
-  refreshTasksLocalStorage();
-  refreshCheckedLocalStorage();
-  activeTaskFilter();
-});
+  itemsCounter()
+  setTasksId()
+  refreshTasksLocalStorage()
+  refreshCheckedLocalStorage()
+  activeTaskFilter()
+})
 
 /////////////////
 // Add new task//
 /////////////////
 
-const input = document.getElementById("input-area");
+const input = document.getElementById("input-area")
 
 input.addEventListener("keydown", (event) => {
-  let inputText = input.value;
+  let inputText = input.value
 
-  if (inputText === '') return;
+  if (inputText === '') return
   if (event.key === "Enter") {
 
-  savedTasks.push(inputText);
-  localStorage.setItem("tasks", JSON.stringify(savedTasks));
+  savedTasks.push(inputText)
+  localStorage.setItem("tasks", JSON.stringify(savedTasks))
   
-  input.value = "";
+  input.value = ""
 
-  addTask(inputText);
-  setTasksId();
-  itemsCounter();
-  activeTaskFilter();
+  addTask(inputText)
+  setTasksId()
+  itemsCounter()
+  activeTaskFilter()
 }
-});
+})
 
 ////////////////////////
 // Color theme switch //
@@ -361,11 +361,11 @@ input.addEventListener("keydown", (event) => {
 document.getElementById("theme-button").addEventListener ('click', () => {
   const CurrentColorScheme = document.documentElement.getAttribute(
     "data-color-scheme"
-  );
-  const newColorScheme = CurrentColorScheme === "default" ? "dark" : "default";
-  document.documentElement.setAttribute("data-color-scheme", newColorScheme);
-  localStorage.setItem("color-scheme", newColorScheme);
-}); 
+  )
+  const newColorScheme = CurrentColorScheme === "default" ? "dark" : "default"
+  document.documentElement.setAttribute("data-color-scheme", newColorScheme)
+  localStorage.setItem("color-scheme", newColorScheme)
+}) 
 
 /////////////////////////
 /////////////////////////
